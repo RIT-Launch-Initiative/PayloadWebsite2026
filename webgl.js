@@ -1,27 +1,10 @@
-/**
- * webgl.js  –  entry point
- *
- * Two shader programs:
- *   square  – original coloured 2-D quad
- *   mesh    – Phong-lit 3-D OBJ mesh
- *
- * Console commands:
- *   load         – open a file picker and load a local .obj file
- *   reset        – return to the default square
- *   help         – list commands
- *   fov <deg>    – change field-of-view
- *   color <hex>  – change mesh colour  e.g.  color #ff6030
- */
-
 import { initBuffers, initMeshBuffers } from "./init-buffers.js";
 import { drawScene, camera }            from "./draw-scene.js";
 import { parseOBJ }                     from "./parse-obj.js";
 
-// ─── State ───────────────────────────────────────────────────────────────────
 let gl, programInfo, buffers;
 let animFrameId = null;
 
-// ─── Boot ────────────────────────────────────────────────────────────────────
 main();
 
 function main() {
@@ -32,7 +15,6 @@ function main() {
         return;
     }
 
-    // Resize canvas to match its CSS size
     resizeCanvas();
     window.addEventListener('resize', () => { resizeCanvas(); render(); });
 
@@ -47,7 +29,6 @@ function main() {
     consoleLog("WebGL ready. Type <b>help</b> for commands.", "info");
 }
 
-// ─── Render loop ─────────────────────────────────────────────────────────────
 function startRenderLoop() {
     if (animFrameId) cancelAnimationFrame(animFrameId);
     (function loop() {
@@ -73,7 +54,6 @@ function resizeCanvas() {
     }
 }
 
-// ─── Orbit camera mouse / touch controls ─────────────────────────────────────
 function setupOrbitControls(canvas) {
     let dragging = false, lastX = 0, lastY = 0;
 
@@ -98,7 +78,6 @@ function setupOrbitControls(canvas) {
         camera.distance = Math.max(0.1, camera.distance);
     }, { passive: false });
 
-    // Touch
     let lastTouchDist = null;
     canvas.addEventListener('touchstart', e => {
         if (e.touches.length === 1) {
@@ -132,7 +111,6 @@ function setupOrbitControls(canvas) {
     }, { passive: false });
 }
 
-// ─── Console ─────────────────────────────────────────────────────────────────
 document.addEventListener('keyup', async (e) => {
     if (e.key !== 'Enter') return;
     const input = document.getElementById('enter');
@@ -211,17 +189,14 @@ async function handleCommand(raw) {
     }
 }
 
-// ─── File picker ─────────────────────────────────────────────────────────────
 function pickOBJFile() {
     return new Promise((resolve, reject) => {
         const input = document.createElement('input');
         input.type   = 'file';
         input.accept = '.obj,text/plain';
 
-        // If the user closes the picker without choosing, treat as cancelled
         const onFocus = () => {
             window.removeEventListener('focus', onFocus);
-            // Give the change event time to fire first
             setTimeout(() => reject(new Error('cancelled')), 500);
         };
 
@@ -250,9 +225,6 @@ function consoleLog(html, type = 'info') {
     history.scrollTop = history.scrollHeight;
 }
 
-// ─── Shader programs ──────────────────────────────────────────────────────────
-
-// --- Square (legacy) ---------------------------------------------------------
 function buildSquareProgram(gl) {
     const vs = `
         attribute vec4 aVertexPosition;
@@ -285,7 +257,6 @@ function buildSquareProgram(gl) {
     };
 }
 
-// --- Mesh (Phong) -------------------------------------------------------------
 function buildMeshProgram(gl) {
     const vs = `
         attribute vec3 aVertexPosition;
@@ -355,7 +326,6 @@ function buildMeshProgram(gl) {
     };
 }
 
-// ─── Shader helpers ───────────────────────────────────────────────────────────
 function initShaderProgram(gl, vsSource, fsSource) {
     const vs = loadShader(gl, gl.VERTEX_SHADER,   vsSource);
     const fs = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);

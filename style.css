@@ -70,14 +70,13 @@ input:focus {
     line-height: 1.5;
 }
 
-/* Log level colours */
 .preCommand.cmd   { color: #7ab8f5; }
 .preCommand.info  { color: #8fc8a8; }
 .preCommand.ok    { color: #a8e6a0; }
 .preCommand.error { color: #f08080; }
-.preCommand       { color: #8fa0b8; } /* default */
+.preCommand       { color: #8fa0b8; }
 
-/* Scrollbar */
+
 #console-history::-webkit-scrollbar { width: 4px; }
 #console-history::-webkit-scrollbar-track { background: #0a0a0a; }
 #console-history::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 2px; }

@@ -1,10 +1,5 @@
-/**
- * draw-scene.js
- * Renders either the legacy coloured square or a lit 3-D OBJ mesh.
- */
 import { mat4 } from "./glMatrix/index.js";
 
-// ─── Shared camera state (mutated by webgl.js) ────────────────────────────────
 export const camera = {
     yaw:      0.4,
     pitch:    0.3,
@@ -13,7 +8,6 @@ export const camera = {
     fov:      45,
 };
 
-// ─── Main draw ────────────────────────────────────────────────────────────────
 function drawScene(gl, programInfo, buffers) {
     gl.clearColor(0.08, 0.08, 0.10, 1.0);
     gl.clearDepth(1.0);
@@ -32,7 +26,6 @@ function drawScene(gl, programInfo, buffers) {
         1000.0,
     );
 
-    // Orbit camera
     const eyeX = camera.target[0] + camera.distance * Math.sin(camera.yaw)   * Math.cos(camera.pitch);
     const eyeY = camera.target[1] + camera.distance * Math.sin(camera.pitch);
     const eyeZ = camera.target[2] + camera.distance * Math.cos(camera.yaw)   * Math.cos(camera.pitch);
@@ -55,7 +48,6 @@ function drawScene(gl, programInfo, buffers) {
     }
 }
 
-// ─── OBJ mesh (Phong) ─────────────────────────────────────────────────────────
 function drawMesh(gl, p, buffers, proj, mv, nm, eyePos) {
     gl.useProgram(p.program);
 
@@ -78,7 +70,6 @@ function drawMesh(gl, p, buffers, proj, mv, nm, eyePos) {
     gl.drawArrays(gl.TRIANGLES, 0, buffers.count);
 }
 
-// ─── Legacy square ────────────────────────────────────────────────────────────
 function drawSquare(gl, p, buffers, proj) {
     gl.useProgram(p.program);
 
@@ -94,7 +85,6 @@ function drawSquare(gl, p, buffers, proj) {
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 function bindAttr(gl, buffer, location, numComponents) {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.vertexAttribPointer(location, numComponents, gl.FLOAT, false, 0, 0);

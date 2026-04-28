@@ -1,13 +1,3 @@
-/**
- * init-buffers.js
- * Creates and uploads WebGL buffers.
- *
- * initBuffers(gl)          – default coloured square (legacy fallback)
- * initMeshBuffers(gl, obj) – upload parsed OBJ mesh
- *   obj: { positions: Float32Array, normals: Float32Array }
- */
-
-// ─── Legacy coloured square (kept for first-load) ────────────────────────────
 function initBuffers(gl) {
     return {
         position: initPositionBuffer(gl),
@@ -39,7 +29,6 @@ function initPositionBuffer(gl) {
     return buf;
 }
 
-// ─── OBJ mesh buffers ────────────────────────────────────────────────────────
 function initMeshBuffers(gl, obj) {
     const posBuf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
@@ -55,7 +44,6 @@ function initMeshBuffers(gl, obj) {
         color:    null,
         count:    obj.vertexCount,
         mode:     'mesh',
-        // Store a normalised copy so we can auto-center the camera
         bbox: computeBBox(obj.positions),
     };
 }

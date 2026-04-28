@@ -1,13 +1,3 @@
-/**
- * parse-obj.js
- * Parses a Wavefront .obj file string into flat Float32Arrays
- * ready to upload to WebGL buffers.
- *
- * Returns: { positions, normals, vertexCount }
- *   positions – flat [x,y,z, x,y,z, …]  (one entry per triangle vertex)
- *   normals   – flat [nx,ny,nz, …]       (same length)
- *   vertexCount – number of vertices
- */
 export function parseOBJ(text) {
     const rawPositions = [];   // indexed from 1
     const rawNormals   = [];   // indexed from 1
@@ -41,7 +31,6 @@ export function parseOBJ(text) {
                 parseFloat(parts[2] ?? 0),
             ]);
         } else if (keyword === 'f') {
-            // Fan-triangulate any polygon (works for quads too)
             const faceVerts = parts.slice(1).map(parseFaceVertex);
             for (let i = 1; i < faceVerts.length - 1; i++) {
                 emitTriangle(faceVerts[0], faceVerts[i], faceVerts[i + 1]);
@@ -49,7 +38,6 @@ export function parseOBJ(text) {
         }
     }
 
-    // If the OBJ had no normals, compute face normals
     const hasNormals = outNormals.length > 0;
     if (!hasNormals) {
         computeFaceNormals(outPositions, outNormals);
@@ -60,8 +48,6 @@ export function parseOBJ(text) {
         normals:     new Float32Array(outNormals),
         vertexCount: outPositions.length / 3,
     };
-
-    // ─── helpers ────────────────────────────────────────────────────────────
 
     function parseFaceVertex(token) {
         // token = "v", "v/vt", "v/vt/vn", or "v//vn"  (1-based indices)
@@ -78,14 +64,12 @@ export function parseOBJ(text) {
                 const n = rawNormals[ref.ni - 1];
                 outNormals.push(...n);
             } else {
-                // placeholder – will be filled by computeFaceNormals
                 outNormals.push(0, 0, 1);
             }
         }
     }
 
     function computeFaceNormals(pos, nor) {
-        // Overwrite every group of 3 vertices with the face normal
         for (let i = 0; i < pos.length; i += 9) {
             const ax = pos[i],     ay = pos[i+1], az = pos[i+2];
             const bx = pos[i+3],   by = pos[i+4], bz = pos[i+5];
