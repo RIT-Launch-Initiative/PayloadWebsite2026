@@ -1,0 +1,83 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#gl-canvas {
+    flex: 1 1 auto;
+    display: block;
+    width: 100%;
+    min-height: 0;
+    cursor: grab;
+}
+
+#gl-canvas:active {
+    cursor: grabbing;
+}
+
+.console {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid #222;
+}
+
+#console-history {
+    height: 120px;
+    overflow-y: auto;
+    width: 100%;
+    background-color: #0a0a0a;
+    padding: 4px 6px;
+    box-sizing: border-box;
+}
+
+#enter {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    width: 100%;
+    background-color: #0d1117;
+    color: #b0c8e8;
+    border: none;
+    border-top: 1px solid #1e2a3a;
+    padding: 6px 8px;
+    box-sizing: border-box;
+}
+
+#enter::placeholder {
+    color: #3a5070;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.preCommand {
+    margin: 0;
+    padding: 1px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* Log level colours */
+.preCommand.cmd   { color: #7ab8f5; }
+.preCommand.info  { color: #8fc8a8; }
+.preCommand.ok    { color: #a8e6a0; }
+.preCommand.error { color: #f08080; }
+.preCommand       { color: #8fa0b8; } /* default */
+
+/* Scrollbar */
+#console-history::-webkit-scrollbar { width: 4px; }
+#console-history::-webkit-scrollbar-track { background: #0a0a0a; }
+#console-history::-webkit-scrollbar-thumb { background: #2a3a4a; border-radius: 2px; }
